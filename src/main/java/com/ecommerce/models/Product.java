@@ -1,7 +1,8 @@
 package com.ecommerce.models;
 
 import jakarta.persistence.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
@@ -23,6 +24,7 @@ public class Product implements Serializable {
   @Column(nullable = false)
   private int stock = 0;
 
+  // if using dependecies lombok is not constructor, getter and setter.
   public Product() {
   }
 

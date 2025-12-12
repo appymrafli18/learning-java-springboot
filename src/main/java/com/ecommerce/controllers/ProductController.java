@@ -1,41 +1,57 @@
 package com.ecommerce.controllers;
 
+import com.ecommerce.dto.ApiResponse;
+import com.ecommerce.dto.requests.ProductPatchRequest;
+import com.ecommerce.dto.requests.ProductRequest;
 import com.ecommerce.models.Product;
 import com.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.error.Error;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
 
-  @Autowired
-  private ProductService productService;
+  private final ProductService productService;
+
+  public ProductController(ProductService productService) {
+    this.productService = productService;
+  }
 
   @GetMapping
-  public Iterable<Product> index() {
-    return productService.findAll();
+  public ResponseEntity<ApiResponse<Iterable<Product>>> index() {
+    Iterable<Product> products = productService.findAll();
+    ApiResponse<Iterable<Product>> response = new ApiResponse<>(200, "Success Get All Products", products);
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> findById(@PathVariable Long id) {
+  public ResponseEntity<ApiResponse<Product>> findById(@PathVariable Long id) {
     Product search = productService.findById(id);
+
+    ResponseEntity<ApiResponse<Product>> response;
     if (search == null) {
-      return ResponseEntity.status(404).body("Product not found");
+      response = ResponseEntity.status(404).body(new ApiResponse<>(404, "Product not found", null));
+    } else {
+      response = ResponseEntity.ok(new ApiResponse<>(200, "Success Selected Product", search));
     }
 
-    return ResponseEntity.ok(search);
+    return response;
   }
 
   @PostMapping
-  public Product save(@RequestBody Product product) {
-    return productService.create(product);
+  public Product create(@Valid @RequestBody ProductRequest req) {
+    return productService.create(req);
   }
 
-  @PatchMapping
-  public Product update(@RequestBody Product product) {
-    return productService.update(product);
+  @PatchMapping("/{id}")
+  public Product update(@PathVariable("id") Long id, @Valid @RequestBody ProductPatchRequest req) {
+    return productService.update(id, req);
   }
 
   @DeleteMapping("/{id}")
