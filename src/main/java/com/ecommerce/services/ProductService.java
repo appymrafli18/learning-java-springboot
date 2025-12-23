@@ -2,9 +2,11 @@ package com.ecommerce.services;
 
 import com.ecommerce.DTOs.requests.ProductPatchRequest;
 import com.ecommerce.DTOs.requests.ProductRequest;
+import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.Product;
 import com.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,9 +36,8 @@ public class ProductService {
   }
 
   public Product update(Long id, ProductPatchRequest request) {
-    Product product = productRepository.findById(id).orElse(null);
+    Product product = this.findById(id);
 
-    if (product == null) return null;
     if (request.getName() != null) product.setName(request.getName());
     if (request.getPrice() != null) product.setPrice(request.getPrice());
     if (request.getStock() != null) product.setStock(request.getStock());
@@ -45,11 +46,15 @@ public class ProductService {
   }
 
   public Product findById(Long id) {
-    return productRepository.findById(id).orElse(null);
+    return productRepository.findById(id).orElseThrow(() -> new NotFoundException("Product not found with id " + id));
   }
 
   public void delete(Long id) {
-    productRepository.deleteById(id);
+    try {
+      productRepository.deleteById(id);
+    } catch (EmptyResultDataAccessException ex) {
+      throw new NotFoundException("Product not found with id " + id);
+    }
   }
 
 }

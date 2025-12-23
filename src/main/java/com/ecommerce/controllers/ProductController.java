@@ -23,7 +23,7 @@ public class ProductController {
     this.productService = productService;
   }
 
-  @GetMapping
+  @GetMapping("/")
   public ResponseEntity<ApiResponse<List<Product>>> index() {
     List<Product> products = productService.findAll();
 
@@ -31,17 +31,10 @@ public class ProductController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<Product>> findById(@PathVariable Long id) {
+  public ResponseEntity<ApiResponse<Product>> findById(@PathVariable("id") Long id) {
     Product search = productService.findById(id);
 
-    ResponseEntity<ApiResponse<Product>> response;
-    if (search == null) {
-      response = ResponseEntity.status(404).body(new ApiResponse<>(404, "Product not found", null));
-    } else {
-      response = ResponseEntity.ok(new ApiResponse<>(200, "Success Selected Product", search));
-    }
-
-    return response;
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success Get Product", search));
   }
 
   @PostMapping
@@ -55,15 +48,11 @@ public class ProductController {
   public ResponseEntity<ApiResponse<Product>> update(@PathVariable("id") Long id, @Valid @RequestBody ProductPatchRequest request) {
     Product updateProduct = productService.update(id, request);
 
-    if (updateProduct == null) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, "Product not found", null));
-    }
-
     return ResponseEntity.ok(new ApiResponse<>(200, "Success Update Product", updateProduct));
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<ApiResponse> delete(@PathVariable("id") Long id) {
+  public ResponseEntity<ApiResponse<Void>> delete(@PathVariable("id") Long id) {
     productService.delete(id);
     return ResponseEntity.ok(new ApiResponse<>(200, "Success Delete Product", null));
   }

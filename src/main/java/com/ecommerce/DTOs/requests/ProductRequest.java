@@ -14,7 +14,8 @@ public class ProductRequest {
   private Long price;
 
   @NotNull(message = "stock is required")
-  @Min(value = 0, message = "Stock must be >= 0")
+  // @Min(value = 0, message = "Stock must be >= 0")
+  @Positive(message = "Stock must be greater than 0")
   private int stock;
 
   public String getName() {
