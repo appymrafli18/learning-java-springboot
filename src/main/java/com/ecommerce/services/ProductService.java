@@ -1,51 +1,55 @@
 package com.ecommerce.services;
 
-import com.ecommerce.dto.requests.ProductPatchRequest;
-import com.ecommerce.dto.requests.ProductRequest;
+import com.ecommerce.DTOs.requests.ProductPatchRequest;
+import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.models.Product;
-import com.ecommerce.repositories.ProductRepo;
+import com.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
 public class ProductService {
 
-  private final ProductRepo productRepo;
+  private final ProductRepository productRepository;
 
-  public ProductService(ProductRepo productRepo) {
-    this.productRepo = productRepo;
+  public ProductService(ProductRepository productRepository) {
+    this.productRepository = productRepository;
   }
 
-  public Product create(ProductRequest req) {
+  public List<Product> findAll() {
+    return productRepository.findAll();
+  }
+
+  public Product create(ProductRequest request) {
     Product product = new Product();
 
-    product.setName(req.getName());
-    product.setPrice(req.getPrice());
-    product.setStock(req.getStock());
+    product.setName(request.getName());
+    product.setPrice(request.getPrice());
+    product.setStock(request.getStock());
 
-    return productRepo.save(product);
+    return productRepository.save(product);
   }
 
-  public Product update(Long id, ProductPatchRequest req) {
-    Product product = productRepo.findById(id).orElseThrow(() -> new RuntimeException("product not found"));
+  public Product update(Long id, ProductPatchRequest request) {
+    Product product = productRepository.findById(id).orElse(null);
 
-    if (req.getName() != null)  product.setName(req.getName());
-    if (req.getPrice() != null) product.setPrice(req.getPrice());
-    if (req.getStock() != null) product.setStock(req.getStock());
+    if (product == null) return null;
+    if (request.getName() != null) product.setName(request.getName());
+    if (request.getPrice() != null) product.setPrice(request.getPrice());
+    if (request.getStock() != null) product.setStock(request.getStock());
 
-    return productRepo.save(product);
+    return productRepository.save(product);
   }
 
   public Product findById(Long id) {
-    return productRepo.findById(id).orElse(null);
+    return productRepository.findById(id).orElse(null);
   }
 
   public void delete(Long id) {
-    productRepo.deleteById(id);
+    productRepository.deleteById(id);
   }
 
-  public Iterable<Product> findAll() {
-    return productRepo.findAll();
-  }
 }

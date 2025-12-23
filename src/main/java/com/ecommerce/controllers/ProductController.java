@@ -1,17 +1,17 @@
 package com.ecommerce.controllers;
 
-import com.ecommerce.dto.ApiResponse;
-import com.ecommerce.dto.requests.ProductPatchRequest;
-import com.ecommerce.dto.requests.ProductRequest;
+import com.ecommerce.DTOs.ApiResponse;
+import com.ecommerce.DTOs.requests.ProductPatchRequest;
+import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.models.Product;
 import com.ecommerce.services.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.error.Error;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/product")
@@ -24,10 +24,10 @@ public class ProductController {
   }
 
   @GetMapping
-  public ResponseEntity<ApiResponse<Iterable<Product>>> index() {
-    Iterable<Product> products = productService.findAll();
-    ApiResponse<Iterable<Product>> response = new ApiResponse<>(200, "Success Get All Products", products);
-    return ResponseEntity.ok(response);
+  public ResponseEntity<ApiResponse<List<Product>>> index() {
+    List<Product> products = productService.findAll();
+
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success Get Products", products));
   }
 
   @GetMapping("/{id}")
@@ -45,19 +45,26 @@ public class ProductController {
   }
 
   @PostMapping
-  public Product create(@Valid @RequestBody ProductRequest req) {
-    return productService.create(req);
+  public ResponseEntity<ApiResponse<Product>> create(@Valid @RequestBody ProductRequest request) {
+    Product productCreate = productService.create(request);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(201, "Success Create Product", productCreate));
   }
 
   @PatchMapping("/{id}")
-  public Product update(@PathVariable("id") Long id, @Valid @RequestBody ProductPatchRequest req) {
-    return productService.update(id, req);
+  public ResponseEntity<ApiResponse<Product>> update(@PathVariable("id") Long id, @Valid @RequestBody ProductPatchRequest request) {
+    Product updateProduct = productService.update(id, request);
+
+    if (updateProduct == null) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(404, "Product not found", null));
+    }
+
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success Update Product", updateProduct));
   }
 
   @DeleteMapping("/{id}")
-  public String delete(@PathVariable("id") Long id) {
+  public ResponseEntity<ApiResponse> delete(@PathVariable("id") Long id) {
     productService.delete(id);
-    return "Success Delete";
+    return ResponseEntity.ok(new ApiResponse<>(200, "Success Delete Product", null));
   }
-
 }

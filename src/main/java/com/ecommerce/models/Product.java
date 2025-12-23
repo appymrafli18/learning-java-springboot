@@ -1,9 +1,6 @@
 package com.ecommerce.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
 
 @Entity

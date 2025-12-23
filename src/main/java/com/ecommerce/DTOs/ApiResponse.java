@@ -1,4 +1,4 @@
-package com.ecommerce.dto;
+package com.ecommerce.DTOs;
 
 public class ApiResponse<T> {
   private int statusCode;
