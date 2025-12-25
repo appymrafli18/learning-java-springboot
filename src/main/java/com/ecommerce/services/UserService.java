@@ -1,5 +1,6 @@
 package com.ecommerce.services;
 
+import com.ecommerce.DTOs.requests.UserPatchRequest;
 import com.ecommerce.DTOs.requests.UserRequest;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.User;
@@ -24,12 +25,14 @@ public class UserService {
     return userRepository.findAll();
   }
 
-
   public User findById(Long id) {
     return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id " + id));
   }
 
-  //  User findByEmail(String email);
+  public User findByEmail(String email) {
+    return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found with email " + email));
+  }
+
   public User create(UserRequest user) {
     User newUser = new User();
 
@@ -39,7 +42,22 @@ public class UserService {
 
     return userRepository.save(newUser);
   }
-//  User update(Long id, User user);
-//  void delete(Long id);
+
+  public User update(Long id, UserPatchRequest request) {
+    User existingUser = this.findById(id);
+
+    if (request.getName() != null) existingUser.setName(request.getName());
+    if (request.getEmail() != null) existingUser.setEmail(request.getEmail());
+    if (request.getPassword() != null) existingUser.setPassword(request.getPassword());
+
+    existingUser.setUpdated(Instant.now());
+
+    return userRepository.save(existingUser);
+  }
+
+  public void delete(Long id /* 1 */) {
+    User existingUser = this.findById(id);
+    userRepository.deleteById(existingUser.getId());
+  }
 
 }
