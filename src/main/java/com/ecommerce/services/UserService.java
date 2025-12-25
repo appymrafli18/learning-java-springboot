@@ -6,6 +6,7 @@ import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.User;
 import com.ecommerce.repositories.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -16,9 +17,11 @@ import java.util.List;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public List<User> findAll() {
@@ -33,12 +36,15 @@ public class UserService {
     return userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found with email " + email));
   }
 
-  public User create(UserRequest user) {
+  public User create(UserRequest request) {
     User newUser = new User();
 
-    newUser.setName(user.getName());
-    newUser.setEmail(user.getEmail());
-    newUser.setPassword(user.getPassword());
+    newUser.setName(request.getName());
+    newUser.setEmail(request.getEmail());
+
+    // Encode the password before saving
+    String encodedPassword = passwordEncoder.encode(request.getPassword());
+    newUser.setPassword(encodedPassword);
 
     return userRepository.save(newUser);
   }
@@ -48,7 +54,12 @@ public class UserService {
 
     if (request.getName() != null) existingUser.setName(request.getName());
     if (request.getEmail() != null) existingUser.setEmail(request.getEmail());
-    if (request.getPassword() != null) existingUser.setPassword(request.getPassword());
+    if (request.getPassword() != null) {
+      // Encode the password before updating
+      String encodedPassword = passwordEncoder.encode(request.getPassword());
+      existingUser.setPassword(encodedPassword);
+    };
+
 
     existingUser.setUpdated(Instant.now());
 
