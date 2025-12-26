@@ -1,6 +1,8 @@
 package com.ecommerce.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 
 @Entity
@@ -21,15 +23,20 @@ public class Product implements Serializable {
   @Column(nullable = false)
   private int stock = 0;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
   // if using dependecies lombok is not constructor, getter and setter.
   public Product() {
   }
 
-  public Product(Long id, String name, Long price, int stock) {
+  public Product(Long id, String name, Long price, int stock, Category category) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.stock = stock;
+    this.category = category;
   }
 
   public Long getId() {

@@ -23,7 +23,7 @@ public class ProductController {
     this.productService = productService;
   }
 
-  @GetMapping("/")
+  @GetMapping
   public ResponseEntity<ApiResponse<List<Product>>> index() {
     List<Product> products = productService.findAll();
 

@@ -4,6 +4,7 @@ import com.ecommerce.DTOs.requests.ProductPatchRequest;
 import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.Product;
+import com.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,9 +17,11 @@ import java.util.List;
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final CategoryRepository categoryRepository;
 
-  public ProductService(ProductRepository productRepository) {
+  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
     this.productRepository = productRepository;
+    this.categoryRepository = categoryRepository;
   }
 
   public List<Product> findAll() {
