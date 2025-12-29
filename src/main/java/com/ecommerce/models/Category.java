@@ -1,5 +1,7 @@
 package com.ecommerce.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -18,6 +20,8 @@ public class Category implements Serializable {
   private String name;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = false)
+  @JsonBackReference
+//  @JsonIgnore
   private List<Product> products = new ArrayList<>();
 
   public Category() {

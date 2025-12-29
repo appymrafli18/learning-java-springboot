@@ -3,6 +3,7 @@ package com.ecommerce.services;
 import com.ecommerce.DTOs.requests.ProductPatchRequest;
 import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.exceptions.NotFoundException;
+import com.ecommerce.models.Category;
 import com.ecommerce.models.Product;
 import com.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.repositories.ProductRepository;
@@ -17,11 +18,11 @@ import java.util.List;
 public class ProductService {
 
   private final ProductRepository productRepository;
-  private final CategoryRepository categoryRepository;
+  private final CategoryService categoryService;
 
-  public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+  public ProductService(ProductRepository productRepository, CategoryService categoryService) {
     this.productRepository = productRepository;
-    this.categoryRepository = categoryRepository;
+    this.categoryService = categoryService;
   }
 
   public List<Product> findAll() {
@@ -34,6 +35,9 @@ public class ProductService {
     product.setName(request.getName());
     product.setPrice(request.getPrice());
     product.setStock(request.getStock());
+
+    Category categorySearch = categoryService.findById(request.getCategoryId());
+    product.setCategory(categorySearch);
 
     return productRepository.save(product);
   }

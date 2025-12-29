@@ -18,6 +18,10 @@ public class ProductRequest {
   @Positive(message = "Stock must be greater than 0")
   private int stock;
 
+  @Positive(message = "categoryId must be greater than 0")
+  @NotNull(message = "categoryId is required")
+  private Long categoryId;
+
   public String getName() {
     return name;
   }
@@ -40,5 +44,13 @@ public class ProductRequest {
 
   public void setStock(int stock) {
     this.stock = stock;
+  }
+
+  public Long getCategoryId() {
+    return categoryId;
+  }
+
+  public void setCategoryId(Long categoryId) {
+    this.categoryId = categoryId;
   }
 }
