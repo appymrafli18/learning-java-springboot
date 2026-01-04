@@ -1,30 +1,28 @@
 package com.ecommerce.services;
 
 import com.ecommerce.exceptions.DuplicateCategoryException;
+import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.Category;
 import com.ecommerce.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.DataIntegrityViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
   private final CategoryRepository categoryRepository;
-
-  public CategoryService(CategoryRepository categoryRepository) {
-    this.categoryRepository = categoryRepository;
-  }
 
   public List<Category> findAll() {
     return categoryRepository.findAll();
   }
 
   public Category findById(Long id) {
-    return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found with id " + id));
+    return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category not found with id " + id));
   }
 
   public Category create(Category category) {
@@ -35,12 +33,7 @@ public class CategoryService {
     }
 
     category.setName(name);
-
-    try {
-      return categoryRepository.save(category);
-    } catch (DataIntegrityViolationException e) {
-      throw new DuplicateCategoryException("Category with name " + name + " already exists");
-    }
+    return categoryRepository.save(category);
   }
 
 }

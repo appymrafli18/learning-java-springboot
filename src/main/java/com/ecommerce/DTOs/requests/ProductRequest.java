@@ -2,7 +2,11 @@ package com.ecommerce.DTOs.requests;
 
 
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class ProductRequest {
 
   @NotBlank(message = "name is required")
@@ -21,36 +25,4 @@ public class ProductRequest {
   @Positive(message = "categoryId must be greater than 0")
   @NotNull(message = "categoryId is required")
   private Long categoryId;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Long getPrice() {
-    return price;
-  }
-
-  public void setPrice(Long price) {
-    this.price = price;
-  }
-
-  public int getStock() {
-    return stock;
-  }
-
-  public void setStock(int stock) {
-    this.stock = stock;
-  }
-
-  public Long getCategoryId() {
-    return categoryId;
-  }
-
-  public void setCategoryId(Long categoryId) {
-    this.categoryId = categoryId;
-  }
 }

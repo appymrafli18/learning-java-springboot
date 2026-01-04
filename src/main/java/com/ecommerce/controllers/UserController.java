@@ -6,58 +6,91 @@ import com.ecommerce.DTOs.requests.UserRequest;
 import com.ecommerce.models.User;
 import com.ecommerce.services.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<User>>> findAll() {
+        List<User> users = userService.findAll();
 
-  @GetMapping("")
-  public ResponseEntity<ApiResponse<List<User>>> findAll() {
-    List<User> users = userService.findAll();
+        return ResponseEntity.ok(ApiResponse.<List<User>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success Get Users")
+                .data(users)
+                .build()
+        );
+    }
 
-    return ResponseEntity.ok(new ApiResponse<>(200, "Success Get Users", users));
-  }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> findById(@PathVariable("id") Long id) {
+        User user = userService.findById(id);
 
-  @GetMapping("/{id}")
-  public ResponseEntity<ApiResponse<User>> findById(@PathVariable("id") Long id) {
-    User user = userService.findById(id);
+        return ResponseEntity.ok(ApiResponse.<User>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success Get User By Id")
+                .data(user)
+                .build()
+        );
+    }
 
-    return ResponseEntity.ok(new ApiResponse<>(200, "Success Get User by id", user));
-  }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<ApiResponse<User>> findByEmail(@PathVariable("email") String email) {
+        User user = userService.findByEmail(email);
 
-  @GetMapping("/email/{email}")
-  public ResponseEntity<ApiResponse<User>> findByEmail(@PathVariable("email") String email) {
-    User user = userService.findByEmail(email);
-    return ResponseEntity.ok(new ApiResponse<>(200, "Success Get User by email", user));
-  }
+        return ResponseEntity.ok(ApiResponse.<User>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success Get User by email")
+                .data(user)
+                .build()
+        );
+    }
 
-  @PostMapping("")
-  public ResponseEntity<ApiResponse<User>> create(@Valid @RequestBody UserRequest request) {
-    User createdUser = userService.create(request);
-    return ResponseEntity.status(201).body(new ApiResponse<>(201, "Success Create User", createdUser));
-  }
+    @PostMapping
+    public ResponseEntity<ApiResponse<User>> create(@Valid @RequestBody UserRequest request) {
+        User createdUser = userService.create(request);
 
-  @PatchMapping("/{id}")
-  public ResponseEntity<ApiResponse<User>> update(@PathVariable("id") Long id, @Valid @RequestBody UserPatchRequest request) {
-    User updatedUser = userService.update(id, request);
-    return ResponseEntity.status(200).body(new ApiResponse<>(200, "Success Update User", updatedUser));
-  }
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiResponse.<User>builder()
+                        .statusCode(HttpStatus.CREATED.value())
+                        .message("Success Create User")
+                        .data(createdUser)
+                        .build()
+        );
+    }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<ApiResponse<Map<String, Object>>> delete(@PathVariable("id") Long id) {
-    userService.delete(id);
-    return ResponseEntity.status(200).body(new ApiResponse<>(200, "Success Delete User", null));
-  }
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<User>> update(@PathVariable("id") Long id, @Valid @RequestBody UserPatchRequest request) {
+        User updatedUser = userService.update(id, request);
+
+        return ResponseEntity.ok(ApiResponse.<User>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success Update User")
+                .data(updatedUser)
+                .build()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> delete(@PathVariable Long id) {
+        userService.delete(id);
+
+        return ResponseEntity.ok(ApiResponse.<User>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Success Delete User")
+                .data(null)
+                .build()
+        );
+    }
 
 }

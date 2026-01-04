@@ -1,11 +1,22 @@
 package com.ecommerce.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor // Membuat constructor kosong
+@AllArgsConstructor // Membuat constructor dengan semua parameter
+@Builder // Memungkinkan pembuatan object dengan gaya User.builder().name("Andi").build()
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
   @Id
@@ -22,81 +33,11 @@ public class User {
   @Column(nullable = false, length = 255)
   private String password;
 
+  @CreatedDate
   @Column(nullable = false, updatable = false)
   private Instant created;
 
+  @LastModifiedDate
   @Column(nullable = false)
   private Instant updated;
-
-  @PrePersist
-  protected void onCreate(){
-    Instant now = Instant.now();
-    this.created = now;
-    this.updated = now;
-  }
-
-  @PreUpdate
-  protected void onUpdate(){
-    this.updated = Instant.now();
-  }
-
-  public User() {
-  }
-
-  public User(Long id, String name, String email, String password, Instant created, Instant updated) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.created = created;
-    this.updated = updated;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Instant getCreated() {
-    return created;
-  }
-
-  public void setCreated(Instant created) {
-    this.created = created;
-  }
-
-  public Instant getUpdated() {
-    return updated;
-  }
-
-  public void setUpdated(Instant updated) {
-    this.updated = updated;
-  }
 }

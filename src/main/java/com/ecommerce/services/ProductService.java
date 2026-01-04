@@ -5,9 +5,9 @@ import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.Category;
 import com.ecommerce.models.Product;
-import com.ecommerce.repositories.CategoryRepository;
 import com.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -15,29 +15,26 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProductService {
 
   private final ProductRepository productRepository;
   private final CategoryService categoryService;
-
-  public ProductService(ProductRepository productRepository, CategoryService categoryService) {
-    this.productRepository = productRepository;
-    this.categoryService = categoryService;
-  }
 
   public List<Product> findAll() {
     return productRepository.findAll();
   }
 
   public Product create(ProductRequest request) {
-    Product product = new Product();
-
-    product.setName(request.getName());
-    product.setPrice(request.getPrice());
-    product.setStock(request.getStock());
 
     Category categorySearch = categoryService.findById(request.getCategoryId());
-    product.setCategory(categorySearch);
+
+    Product product = Product.builder()
+            .name(request.getName())
+            .price(request.getPrice())
+            .stock(request.getStock())
+            .category(categorySearch)
+            .build();
 
     return productRepository.save(product);
   }
