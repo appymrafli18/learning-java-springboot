@@ -30,6 +30,9 @@ public class Product implements Serializable {
   @Builder.Default
   private int stock = 0;
 
+  @Column(nullable = true)
+  private String image;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;

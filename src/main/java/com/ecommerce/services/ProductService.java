@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -20,6 +21,7 @@ public class ProductService {
 
   private final ProductRepository productRepository;
   private final CategoryService categoryService;
+  private final ImageService imageService;
 
   public List<Product> findAll() {
     return productRepository.findAll();
@@ -29,22 +31,35 @@ public class ProductService {
 
     Category categorySearch = categoryService.findById(request.getCategoryId());
 
-    Product product = Product.builder()
-            .name(request.getName())
-            .price(request.getPrice())
-            .stock(request.getStock())
-            .category(categorySearch)
-            .build();
+    try {
+      // Save images
+      String fileName = imageService.saveImage(request.getImage());
 
-    return productRepository.save(product);
+      Product product = Product.builder()
+          .name(request.getName())
+          .price(request.getPrice())
+          .stock(request.getStock())
+          .category(categorySearch)
+          .image(fileName)
+          .build();
+
+      return productRepository.save(product);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+
   }
 
   public Product update(Long id, ProductPatchRequest request) {
     Product product = this.findById(id);
 
-    if (request.getName() != null) product.setName(request.getName());
-    if (request.getPrice() != null) product.setPrice(request.getPrice());
-    if (request.getStock() != null) product.setStock(request.getStock());
+    if (request.getName() != null)
+      product.setName(request.getName());
+    if (request.getPrice() != null)
+      product.setPrice(request.getPrice());
+    if (request.getStock() != null)
+      product.setStock(request.getStock());
 
     return productRepository.save(product);
   }

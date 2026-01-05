@@ -1,5 +1,6 @@
 package com.ecommerce.DTOs.requests;
 
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
@@ -25,4 +26,7 @@ public class ProductRequest {
   @Positive(message = "categoryId must be greater than 0")
   @NotNull(message = "categoryId is required")
   private Long categoryId;
+
+  private MultipartFile image;
+
 }

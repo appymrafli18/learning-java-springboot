@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -47,8 +48,29 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Product>> create(@Valid @RequestBody ProductRequest request) {
+	public ResponseEntity<ApiResponse<Product>> create(@Valid @ModelAttribute ProductRequest request) {
+		MultipartFile file = request.getImage();
+
+		// Cek content type
+		String contentType = file.getContentType(); // misal "image/png", "image/jpeg"
+		if (contentType == null || !contentType.startsWith("image/")) {
+			throw new RuntimeException("Only image files are allowed");
+		}
+
+		// Atau cek ekstensi nama file
+		String fileName = file.getOriginalFilename();
+		if (!fileName.endsWith(".png") && !fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg")) {
+			throw new RuntimeException("File extension must be png, jpg, or jpeg");
+		}
 		Product productCreate = productService.create(request);
+
+		if (productCreate == null) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+					ApiResponse.<Product>builder()
+							.statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+							.message("Failed to create product")
+							.build());
+		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(
 				ApiResponse.<Product>builder()
