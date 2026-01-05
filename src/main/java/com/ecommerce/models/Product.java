@@ -1,6 +1,6 @@
 package com.ecommerce.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+// import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,8 +8,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,9 +23,11 @@ public class Product implements Serializable {
   private String name;
 
   @Column(nullable = false)
+  @Builder.Default
   private Long price = 0L;
 
   @Column(nullable = false)
+  @Builder.Default
   private int stock = 0;
 
   @ManyToOne(fetch = FetchType.LAZY)

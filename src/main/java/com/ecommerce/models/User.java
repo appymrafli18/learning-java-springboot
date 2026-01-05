@@ -1,7 +1,6 @@
 package com.ecommerce.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,8 +10,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor // Membuat constructor kosong
 @AllArgsConstructor // Membuat constructor dengan semua parameter
 @Builder // Memungkinkan pembuatan object dengan gaya User.builder().name("Andi").build()

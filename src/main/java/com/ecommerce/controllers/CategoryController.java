@@ -1,6 +1,8 @@
 package com.ecommerce.controllers;
 
 import com.ecommerce.DTOs.ApiResponse;
+import com.ecommerce.DTOs.responses.CategoryType;
+import com.ecommerce.mappers.CategoryMapper;
 import com.ecommerce.models.Category;
 import com.ecommerce.services.CategoryService;
 import lombok.RequiredArgsConstructor;
@@ -13,19 +15,24 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
+@CrossOrigin
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryMapper categoryMapper;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<Category>>> index() {
+    public ResponseEntity<ApiResponse<List<CategoryType>>> index() {
         List<Category> categories = categoryService.findAll();
 
+        // Cukup panggil method dari mapper
+        List<CategoryType> categoriesTypes = categoryMapper.toTypeList(categories);
+
         return ResponseEntity.ok(
-                ApiResponse.<List<Category>>builder()
+                ApiResponse.<List<CategoryType>>builder()
                         .statusCode(HttpStatus.OK.value())
                         .message("Categories Retrieved Successfully")
-                        .data(categories)
+                        .data(categoriesTypes)
                         .build()
         );
     }
