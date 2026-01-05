@@ -18,7 +18,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
     public String Login(LoginRequest request) {
 
@@ -28,8 +27,7 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), user.getPassword()))
             throw new NotFoundException("Password is not correct");
 
-        // generate JWT token
-        return jwtService.generateToken(user);
+        return "true";
     }
 
 }
