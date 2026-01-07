@@ -1,5 +1,6 @@
 package com.ecommerce.DTOs.requests;
 
+import com.ecommerce.constants.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -17,4 +18,6 @@ public class UserPatchRequest {
 
   @Size(min = 6, message = "password must be at least 6 characters")
   private String password;
+
+  private UserRole role;
 }

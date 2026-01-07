@@ -1,5 +1,6 @@
 package com.ecommerce.models;
 
+import com.ecommerce.constants.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,6 +31,9 @@ public class User {
 
   @Column(nullable = false, length = 255)
   private String password;
+
+  @Enumerated(EnumType.STRING)
+  private UserRole role;
 
   @CreatedDate
   @Column(nullable = false, updatable = false)

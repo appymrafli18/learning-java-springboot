@@ -44,6 +44,7 @@ public class UserService {
         User newUser = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
+                .role(request.getRole())
                 .password(encodedPassword)
                 .build();
 
@@ -57,6 +58,8 @@ public class UserService {
             existingUser.setName(request.getName());
         if (request.getEmail() != null)
             existingUser.setEmail(request.getEmail());
+        if (request.getRole() != null)
+            existingUser.setRole(request.getRole());
         if (request.getPassword() != null) {
             // Encode the password before updating
             String encodedPassword = passwordEncoder.encode(request.getPassword());
