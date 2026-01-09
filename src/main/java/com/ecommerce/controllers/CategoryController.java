@@ -23,7 +23,7 @@ public class CategoryController {
     private final CategoryMapper categoryMapper;
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<List<CategoryType>>> index() {
         List<Category> categories = categoryService.findAll();
 

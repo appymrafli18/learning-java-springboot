@@ -1,6 +1,7 @@
 package com.ecommerce.models;
 
 import com.ecommerce.constants.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,6 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor // Membuat constructor dengan semua parameter
 @Builder // Memungkinkan pembuatan object dengan gaya User.builder().name("Andi").build()
 @EntityListeners(AuditingEntityListener.class)
+//@ToString(exclude = "cart") // Kalau kamu pakai Lombok, bisa pakai ini untuk otomatis generate toString tapi exclude field yang bikin loop
 public class User {
 
   @Id
@@ -42,4 +44,8 @@ public class User {
   @LastModifiedDate
   @Column(nullable = false)
   private Instant updated;
+
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  //@JsonIgnoreProperties("user") // Abaikan field 'user' saat serialize cart
+  private Cart cart;
 }

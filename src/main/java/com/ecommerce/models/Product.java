@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -33,4 +34,8 @@ public class Product implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)
   private Category category;
+
+  // tidak perlu, karena tidak ingin di akses dri product
+//  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+//  private List<CartItem> cartItem;
 }

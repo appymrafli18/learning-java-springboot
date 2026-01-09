@@ -24,7 +24,7 @@ public class ProductController {
 	private final ProductService productService;
 
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<ApiResponse<List<Product>>> index() {
 		List<Product> products = productService.findAll();
 
