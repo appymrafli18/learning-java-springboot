@@ -1,6 +1,6 @@
 package com.ecommerce.entity;
 
-import com.ecommerce.constants.OrderStatus;
+import com.ecommerce.constants  .OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,6 +28,7 @@ public class Order implements Serializable {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
+  @Builder.Default
   private OrderStatus status = OrderStatus.Pending;
 
   @CreatedDate

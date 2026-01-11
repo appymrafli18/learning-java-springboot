@@ -1,7 +1,6 @@
 package com.ecommerce.DTOs.responses;
 
 import com.ecommerce.constants.UserRole;
-import jdk.jshell.Snippet;
 import lombok.Builder;
 
 @Builder

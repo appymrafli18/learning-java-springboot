@@ -18,13 +18,13 @@ public class CartItem implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Builder.Default
     private Integer quantity = 0;
 
     // relationalship with carts
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
-
 
     // relationalship with product
     @ManyToOne(fetch = FetchType.LAZY)

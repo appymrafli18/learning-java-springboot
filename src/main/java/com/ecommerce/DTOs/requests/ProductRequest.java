@@ -1,19 +1,17 @@
 package com.ecommerce.DTOs.requests;
 
-
+import com.ecommerce.constants.AppConstants;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 
 @Getter
 @Setter
 public class ProductRequest {
 
   @NotBlank(message = "name is required")
-  @Size(min = 6, message = "name must be at least 6 characters")
+  @Size(min = AppConstants.MIN_NAME_LENGTH, message = "name must be at least 6 characters")
   private String name;
 
   @NotNull(message = "price is required")

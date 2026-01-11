@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface UserMapper {
 
   // mapping to DTO
+//  @Mapping(target = "cart", ignore = true)
   UserResponse toDTO(User user);
 
   // mapping to spesifik DTO
@@ -20,6 +21,10 @@ public interface UserMapper {
   UserSpesificResponse spesificToDTO(User user);
 
   // mapping to entity
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "created", ignore = true)
+  @Mapping(target = "updated", ignore = true)
+  @Mapping(target = "cart", ignore = true)
   User toEntity(UserRequest request);
 
   // MapStruct otomatis pakai method ini untuk setiap item di list
@@ -29,6 +34,10 @@ public interface UserMapper {
   CartItemResponse toCartItemDTO(CartItem cartItem);
 
   @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "created", ignore = true)
+  @Mapping(target = "updated", ignore = true)
+  @Mapping(target = "cart", ignore = true)
   void updateEntity(UserPatchRequest request, @MappingTarget User user);
 
 }

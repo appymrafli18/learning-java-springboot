@@ -1,5 +1,6 @@
 package com.ecommerce.DTOs.requests;
 
+import com.ecommerce.constants.AppConstants;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Setter
 public class ProductPatchRequest {
 
-  @Size(min = 6, message = "name must be at least 6 characters")
+  @Size(min = AppConstants.MIN_NAME_LENGTH, message = "name must be at least 6 characters")
   private String name;
 
   @Positive(message = "price must be greater than 0")
