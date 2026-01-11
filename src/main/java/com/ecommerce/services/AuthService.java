@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.DTOs.requests.LoginRequest;
 import com.ecommerce.exceptions.NotFoundException;
-import com.ecommerce.models.User;
+import com.ecommerce.entity.User;
 import com.ecommerce.repositories.UserRepository;
 
 import java.util.Objects;

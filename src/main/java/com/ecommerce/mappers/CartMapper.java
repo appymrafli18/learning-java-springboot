@@ -2,12 +2,10 @@ package com.ecommerce.mappers;
 
 import com.ecommerce.DTOs.responses.CartItemResponse;
 import com.ecommerce.DTOs.responses.CartResponse;
-import com.ecommerce.models.Cart;
-import com.ecommerce.models.CartItem;
+import com.ecommerce.entity.Cart;
+import com.ecommerce.entity.CartItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring") // Agar bisa di-@Autowired di Controller
 public interface CartMapper {

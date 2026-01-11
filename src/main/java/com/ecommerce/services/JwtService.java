@@ -48,27 +48,12 @@ public class JwtService {
                 .compact();
     }
 
-    // 2. validation token
-    public boolean isTokenValid(String token) {
-        try {
-            Jwts.parser()
-                    .verifyWith((SecretKey) getSignInKey())
-                    .build()
-                    .parseSignedClaims(token);
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // 3. extract token
+    // 2. extract token + validation token
     public Claims extractToken(String token) {
         return Jwts.parser()
                 .verifyWith((SecretKey) getSignInKey())
                 .build()
                 .parseSignedClaims(token).getPayload();
-
     }
 
     // 4. Helper

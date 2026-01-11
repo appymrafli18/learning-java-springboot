@@ -1,7 +1,6 @@
-package com.ecommerce.models;
+package com.ecommerce.entity;
 
 import com.ecommerce.constants.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,7 +11,8 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor // Membuat constructor kosong
 @AllArgsConstructor // Membuat constructor dengan semua parameter
 @Builder // Memungkinkan pembuatan object dengan gaya User.builder().name("Andi").build()

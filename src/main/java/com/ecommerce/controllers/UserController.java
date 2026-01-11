@@ -3,7 +3,9 @@ package com.ecommerce.controllers;
 import com.ecommerce.DTOs.ApiResponse;
 import com.ecommerce.DTOs.requests.UserPatchRequest;
 import com.ecommerce.DTOs.requests.UserRequest;
-import com.ecommerce.models.User;
+import com.ecommerce.DTOs.responses.UserResponse;
+import com.ecommerce.DTOs.responses.UserSpesificResponse;
+import com.ecommerce.entity.User;
 import com.ecommerce.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<User>>> findAll() {
-        List<User> users = userService.findAll();
+    public ResponseEntity<ApiResponse<List<UserResponse>>> findAll() {
+        List<UserResponse> users = userService.findAll();
 
-        return ResponseEntity.ok(ApiResponse.<List<User>>builder()
+        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Success Get Users")
                 .data(users)
@@ -33,10 +35,10 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> findById(@PathVariable("id") Long id) {
-        User user = userService.findById(id);
+    public ResponseEntity<ApiResponse<UserSpesificResponse>> findById(@PathVariable("id") Long id) {
+        UserSpesificResponse user = userService.findById(id);
 
-        return ResponseEntity.ok(ApiResponse.<User>builder()
+        return ResponseEntity.ok(ApiResponse.<UserSpesificResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Success Get User By Id")
                 .data(user)
@@ -45,10 +47,10 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<ApiResponse<User>> findByEmail(@PathVariable("email") String email) {
-        User user = userService.findByEmail(email);
+    public ResponseEntity<ApiResponse<UserResponse>> findByEmail(@PathVariable("email") String email) {
+        UserResponse user = userService.findByEmail(email);
 
-        return ResponseEntity.ok(ApiResponse.<User>builder()
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("Success Get User by email")
                 .data(user)

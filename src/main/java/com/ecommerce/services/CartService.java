@@ -1,14 +1,13 @@
 package com.ecommerce.services;
 
 import com.ecommerce.DTOs.requests.CartItemRequest;
-import com.ecommerce.DTOs.responses.CartItemResponse;
 import com.ecommerce.DTOs.responses.CartResponse;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.mappers.CartMapper;
-import com.ecommerce.models.Cart;
-import com.ecommerce.models.CartItem;
-import com.ecommerce.models.Product;
-import com.ecommerce.models.User;
+import com.ecommerce.entity.Cart;
+import com.ecommerce.entity.CartItem;
+import com.ecommerce.entity.Product;
+import com.ecommerce.entity.User;
 import com.ecommerce.repositories.CartRepository;
 import com.ecommerce.repositories.ProductRepository;
 import com.ecommerce.repositories.UserRepository;

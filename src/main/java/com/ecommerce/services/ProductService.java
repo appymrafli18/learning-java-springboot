@@ -3,8 +3,8 @@ package com.ecommerce.services;
 import com.ecommerce.DTOs.requests.ProductPatchRequest;
 import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.exceptions.NotFoundException;
-import com.ecommerce.models.Category;
-import com.ecommerce.models.Product;
+import com.ecommerce.entity.Category;
+import com.ecommerce.entity.Product;
 import com.ecommerce.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +33,7 @@ public class ProductService {
             .name(request.getName())
             .price(request.getPrice())
             .stock(request.getStock())
+            .image(request.getImage().getOriginalFilename())
             .category(categorySearch)
             .build();
 

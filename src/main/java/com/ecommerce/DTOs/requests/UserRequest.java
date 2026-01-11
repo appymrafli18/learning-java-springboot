@@ -20,7 +20,7 @@ public class UserRequest {
   @Email(message = "email format is not valid")
   private String email;
 
-  @NotBlank(message = "role is required")
+  @NotNull(message = "role is required")
   private UserRole role;
 
   @NotBlank(message = "password is required")

@@ -3,14 +3,13 @@ package com.ecommerce.controllers;
 import com.ecommerce.DTOs.ApiResponse;
 import com.ecommerce.DTOs.requests.ProductPatchRequest;
 import com.ecommerce.DTOs.requests.ProductRequest;
-import com.ecommerce.models.Product;
+import com.ecommerce.entity.Product;
 import com.ecommerce.services.ProductService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
-@CrossOrigin
 public class ProductController {
 
 	private final ProductService productService;
@@ -49,7 +47,7 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<Product>> create(@Valid @RequestBody ProductRequest request) {
+	public ResponseEntity<ApiResponse<Product>> create(@Valid @ModelAttribute ProductRequest request) {
 		Product productCreate = productService.create(request);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(

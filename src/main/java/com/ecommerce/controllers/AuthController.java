@@ -35,7 +35,7 @@ public class AuthController {
         String login = authService.Login(request);
 
         // set cookie
-        ResponseCookie cookie = ResponseCookie.from("accessToken", "TRUE-DONG-LOGIN-NYA")
+        ResponseCookie cookie = ResponseCookie.from("accessToken", "TOKEN_AJA_INI_MAH_MUAHAHAA")
                 .httpOnly(true)
                 .secure(true)
                 .path("/")

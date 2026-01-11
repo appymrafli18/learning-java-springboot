@@ -1,15 +1,15 @@
-package com.ecommerce.models;
+package com.ecommerce.entity;
 
 // import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,6 +30,8 @@ public class Product implements Serializable {
   @Column(nullable = false)
   @Builder.Default
   private int stock = 0;
+
+  private String image;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable = false)

@@ -2,7 +2,7 @@ package com.ecommerce.services;
 
 import com.ecommerce.exceptions.DuplicateCategoryException;
 import com.ecommerce.exceptions.NotFoundException;
-import com.ecommerce.models.Category;
+import com.ecommerce.entity.Category;
 import com.ecommerce.repositories.CategoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

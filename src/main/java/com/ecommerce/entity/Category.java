@@ -1,4 +1,4 @@
-package com.ecommerce.models;
+package com.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 // import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,7 +11,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "categories")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,5 +28,6 @@ public class Category implements Serializable {
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = false)
   @JsonBackReference /* alternatif using @JsonIgnore */
   @Builder.Default // Penting agar ArrayList tidak menjadi null saat menggunakan Builder
+  @OrderBy("id ASC")
   private List<Product> products = new ArrayList<>();
 }

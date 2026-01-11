@@ -1,6 +1,6 @@
 package com.ecommerce.repositories;
 
-import com.ecommerce.models.Category;
+import com.ecommerce.entity.Category;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
