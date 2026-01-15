@@ -1,6 +1,7 @@
 package com.ecommerce.entity;
 
 import com.ecommerce.constants  .OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -37,10 +38,12 @@ public class Order implements Serializable {
 
   @OneToMany(mappedBy = "order", orphanRemoval = true, cascade = CascadeType.ALL)
   @Builder.Default
+  @JsonIgnore
   private List<OrderItem> items = new ArrayList<>();
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonIgnore
   private User user;
 
   // helper

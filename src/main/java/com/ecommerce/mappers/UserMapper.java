@@ -13,7 +13,7 @@ import org.mapstruct.*;
 public interface UserMapper {
 
   // mapping to DTO
-//  @Mapping(target = "cart", ignore = true)
+  //@Mapping(target = "cart", ignore = true)
   UserResponse toDTO(User user);
 
   // mapping to spesifik DTO

@@ -1,6 +1,7 @@
 package com.ecommerce.entity;
 
 import com.ecommerce.constants.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -47,5 +48,6 @@ public class User {
 
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   //@JsonIgnoreProperties("user") // Abaikan field 'user' saat serialize cart
+  @JsonIgnore
   private Cart cart;
 }

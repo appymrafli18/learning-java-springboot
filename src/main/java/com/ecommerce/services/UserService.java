@@ -50,10 +50,8 @@ public class UserService {
    * @return user details
    * @throws NotFoundException if user not found
    */
-  public UserSpesificResponse findById(Long id) {
-    if (id == null || id <= 0) {
-      throw new NotFoundException(AppConstants.INVALID_REQUEST);
-    }
+  public UserSpesificResponse findById(Long id) throws NotFoundException {
+    validateId(id);
 
     User user = userRepository.findById(id)
         .orElseThrow(() -> {
@@ -70,7 +68,7 @@ public class UserService {
    * @return user details
    * @throws NotFoundException if user not found
    */
-  public UserResponse findByEmail(String email) {
+  public UserResponse findByEmail(String email) throws NotFoundException {
     if (email == null || email.isBlank()) {
       throw new NotFoundException(AppConstants.INVALID_REQUEST);
     }
@@ -91,7 +89,7 @@ public class UserService {
    * @return the created user
    * @throws DuplicateResourceException if email already exists
    */
-  public User create(UserRequest request) {
+  public User create(UserRequest request) throws DuplicateResourceException {
     if (request == null || request.getEmail() == null) {
       throw new NotFoundException(AppConstants.INVALID_REQUEST);
     }
@@ -120,10 +118,8 @@ public class UserService {
    * @return the updated user
    * @throws NotFoundException if user not found
    */
-  public User update(Long id, UserPatchRequest request) {
-    if (id == null || id <= 0) {
-      throw new NotFoundException(AppConstants.INVALID_REQUEST);
-    }
+  public User update(Long id, UserPatchRequest request) throws NotFoundException {
+    validateId(id);
 
     User existingUser = userRepository.findById(id)
         .orElseThrow(() -> {
@@ -149,10 +145,8 @@ public class UserService {
    * @param id the user ID
    * @throws NotFoundException if user not found
    */
-  public void delete(Long id) {
-    if (id == null || id <= 0) {
-      throw new NotFoundException(AppConstants.INVALID_REQUEST);
-    }
+  public void delete(Long id) throws NotFoundException {
+    validateId(id);
 
     if (!userRepository.existsById(id)) {
       log.warn("User not found for deletion with id: {}", id);
@@ -161,6 +155,16 @@ public class UserService {
 
     userRepository.deleteById(id);
     log.info("User deleted successfully: {}", id);
+  }
+
+  /**
+   * Helper for Validation ID
+   * @param id the userID
+   */
+  private void validateId(Long id) throws NotFoundException {
+    if (id == null || id <= 0) {
+      throw new NotFoundException(AppConstants.INVALID_REQUEST);
+    }
   }
 
 }

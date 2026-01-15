@@ -1,7 +1,6 @@
 package com.ecommerce.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +25,7 @@ public class Category implements Serializable {
   private String name;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", orphanRemoval = false)
-  @JsonBackReference /* alternatif using @JsonIgnore */
+  @JsonIgnore /* alternatif using @JsonBackReference */
   @Builder.Default // Penting agar ArrayList tidak menjadi null saat menggunakan Builder
   @OrderBy("id ASC")
   private List<Product> products = new ArrayList<>();

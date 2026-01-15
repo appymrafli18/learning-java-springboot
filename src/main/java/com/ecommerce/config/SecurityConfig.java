@@ -45,18 +45,21 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .csrf(AbstractHttpConfigurer::disable) // Disable CSRF (stateless API)
-        .formLogin(AbstractHttpConfigurer::disable) // Disable form login (JWT only)
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers(AppConstants.API_AUTH_PREFIX).permitAll()
-            .anyRequest().authenticated())
-        .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()))
-        .exceptionHandling(ex -> ex
-            .accessDeniedHandler(accessDeniedHandler)
-            .authenticationEntryPoint(jwtAuthenticationEntryPoint))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .httpBasic(AbstractHttpConfigurer::disable) // Disable basic authentication
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+      .csrf(AbstractHttpConfigurer::disable) // Disable CSRF (stateless API)
+      .formLogin(AbstractHttpConfigurer::disable) // Disable form login (JWT only)
+      .authorizeHttpRequests(auth -> auth
+        .requestMatchers(AppConstants.API_AUTH_PREFIX).permitAll()
+        .requestMatchers("/swagger-ui/**").permitAll()
+        .requestMatchers("/api-docs/**").permitAll()
+        .anyRequest().authenticated()
+      )
+      .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()))
+      .exceptionHandling(ex -> ex
+        .accessDeniedHandler(accessDeniedHandler)
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint))
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+      .httpBasic(AbstractHttpConfigurer::disable) // Disable basic authentication
+      .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     log.info("Security filter chain configured successfully");
     return http.build();
