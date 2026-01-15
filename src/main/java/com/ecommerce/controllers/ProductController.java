@@ -6,6 +6,7 @@ import com.ecommerce.DTOs.requests.ProductRequest;
 import com.ecommerce.constants.AppConstants;
 import com.ecommerce.entity.Product;
 import com.ecommerce.services.ProductService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class ProductController {
 
 	private final ProductService productService;

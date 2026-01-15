@@ -6,6 +6,9 @@ import com.ecommerce.DTOs.requests.RegisterType;
 import com.ecommerce.DTOs.responses.RegisterResponse;
 import com.ecommerce.constants.AppConstants;
 import com.ecommerce.services.AuthService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoint for authentication management e-commerce")
 public class AuthController {
 
     private final AuthService authService;
@@ -38,7 +42,8 @@ public class AuthController {
      * @return API response with JWT token
      */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<Object>> login(@Valid @RequestBody LoginRequest request,
+    public ResponseEntity<ApiResponse<Object>> login(
+      @Valid @RequestBody LoginRequest request,
             HttpServletResponse response) {
         try {
             String token = authService.login(request);

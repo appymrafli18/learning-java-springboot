@@ -49,8 +49,8 @@ public class SecurityConfig {
       .formLogin(AbstractHttpConfigurer::disable) // Disable form login (JWT only)
       .authorizeHttpRequests(auth -> auth
         .requestMatchers(AppConstants.API_AUTH_PREFIX).permitAll()
-        .requestMatchers("/swagger-ui/**").permitAll()
-        .requestMatchers("/api-docs/**").permitAll()
+        .requestMatchers(AppConstants.API_USER_PREFIX).hasRole("ADMIN")
+        .requestMatchers("/swagger-ui/**", "/api-docs/**").permitAll()
         .anyRequest().authenticated()
       )
       .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(configurationSource()))
