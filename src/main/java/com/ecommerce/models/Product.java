@@ -1,6 +1,5 @@
 package com.ecommerce.models;
 
-// import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -51,7 +51,7 @@ public class UserService {
     }
 
     public User update(Long id, UserPatchRequest request) {
-        User existingUser = this.findById(id);
+        User existingUser = userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with id " + id));
 
         if (request.getName() != null)
             existingUser.setName(request.getName());
