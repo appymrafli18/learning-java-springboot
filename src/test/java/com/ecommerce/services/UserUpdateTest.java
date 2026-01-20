@@ -1,11 +1,9 @@
-package com.ecommerce;
-
+package com.ecommerce.services;
 
 import com.ecommerce.DTOs.requests.UserPatchRequest;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.User;
 import com.ecommerce.repositories.UserRepository;
-import com.ecommerce.services.UserService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +17,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserUpdateTests {
+public class UserUpdateTest {
 
   @Mock
   private UserRepository userRepository;
@@ -31,8 +29,8 @@ public class UserUpdateTests {
   private PasswordEncoder passwordEncoder;
 
   /*
-  * TODO: Skenario User Tidak Ditemukan
-  * */
+   * TODO: Skenario User Tidak Ditemukan
+   * */
   @Test
   void update_UserNotFound_ShouldThrowException() {
     // Given
@@ -45,8 +43,8 @@ public class UserUpdateTests {
   }
 
   /*
-  * TODO: Skenario Sukses: Update Parsial (Nama Saja)
-  * */
+   * TODO: Skenario Sukses: Update Parsial (Nama Saja)
+   * */
   @Test
   void update_OnlyName_ShouldNotEncodePassword() {
     // Given
@@ -63,13 +61,13 @@ public class UserUpdateTests {
 
     // Then
     assertEquals("Baru", result.getName());
-    assertEquals("pass-lamas", result.getPassword()); // Password tetap yang lama
+    assertEquals("pass-lama", result.getPassword()); // Password tetap yang lama
     verify(passwordEncoder, never()).encode(anyString()); // Verifikasi encoder TIDAK dipanggil
   }
 
   /*
-  * TODO: Skenario Sukses: Update Password
-  * */
+   * TODO: Skenario Sukses: Update Password
+   * */
   @Test
   void update_Password_ShouldBeEncoded() {
     // Given
