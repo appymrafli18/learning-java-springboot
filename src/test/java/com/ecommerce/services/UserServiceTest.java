@@ -1,16 +1,16 @@
-package com.ecommerce;
+package com.ecommerce.services;
 
+import com.ecommerce.DTOs.requests.UserPatchRequest;
 import com.ecommerce.DTOs.requests.UserRequest;
 import com.ecommerce.exceptions.DuplicateCategoryException;
 import com.ecommerce.exceptions.NotFoundException;
 import com.ecommerce.models.User;
 import com.ecommerce.repositories.UserRepository;
-import com.ecommerce.services.UserService;
+import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -130,7 +130,6 @@ public class UserServiceTest {
   /*
    * TODO CASE: (create) success + duplicate email
    * */
-
   @Test
   void create_success() {
     UserRequest request = new UserRequest();
@@ -152,7 +151,7 @@ public class UserServiceTest {
   }
 
   @Test
-  void create_duplicate_email(){
+  void create_duplicate_email() {
     UserRequest request = new UserRequest();
     request.setName("joko");
     request.setEmail("joko@gmail.com");
@@ -161,7 +160,9 @@ public class UserServiceTest {
 
     when(userRepository.existsByEmail("joko@gmail.com")).thenReturn(true);
 
-    assertThrows(DuplicateCategoryException.class, () -> userService.create(request));
+    DuplicateCategoryException exception = assertThrows(DuplicateCategoryException.class, () -> userService.create(request));
+
+    assertEquals("Email " + request.getEmail() + " Sudah terdaftar!", exception.getMessage());
 
     verify(userRepository, never()).save(any());
   }
@@ -170,10 +171,126 @@ public class UserServiceTest {
   /*
    * TODO CASE: (update) success + duplicate email + not found
    * */
+  @Test
+  void update_success() {
+    // Arrange
+    Instant justNow = new Date().toInstant();
+    String emails = "hello1@gmail.com";
+    User existingUser = User.builder()
+      .id(1L)
+      .name("hello1")
+      .email(emails)
+      .password("hello1")
+      .created(justNow)
+      .updated(justNow)
+      .build();
+
+    UserPatchRequest request = new UserPatchRequest();
+    request.setName("new-data");
+
+    when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
+
+    when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    // action
+    User result = userService.update(1L, request);
+
+    // assert
+    assertEquals("new-data", result.getName());
+    assertEquals("hello1@gmail.com", result.getEmail());
+    assertEquals("hello1", result.getPassword());
+
+    // verify
+    verify(userRepository, times(1)).findById(1L);
+    verify(userRepository, times(1)).save(existingUser);
+    verify(passwordEncoder, never()).encode(any());
+
+  }
+
+  @Test
+  void update_duplicate_email() {
+    // Arrange
+    Instant justNow = new Date().toInstant();
+    Long id = 1L;
+    String emails = "hello1@gmail.com";
+    User existingUser = User.builder()
+      .id(id)
+      .name("hello1")
+      .email(emails)
+      .password("hello1")
+      .created(justNow)
+      .updated(justNow)
+      .build();
+
+    UserPatchRequest request = new UserPatchRequest();
+    request.setEmail("duplicate@gmail.com");
+
+    // user found
+    when(userRepository.findById(id)).thenReturn(Optional.ofNullable(existingUser));
+
+    // email is defined by another user
+    when(userRepository.existsByEmail("duplicate@gmail.com")).thenReturn(true);
+
+    // action + assert
+    BadRequestException exception = assertThrows(
+      BadRequestException.class,
+      () -> userService.update(id, request)
+    );
+
+    assertEquals("Email already exists", exception.getMessage());
+
+    // verify
+    verify(userRepository, never()).save(any(User.class));
+  }
+
+  @Test
+  void update_not_found() {
+    Long id = 10L;
+
+    when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+    // test error
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.findById(id));
+
+    assertEquals("User not found with id " + id, exception.getMessage());
+
+    verify(userRepository, times(1)).findById(id);
+    verify(userRepository, never()).save(any(User.class));
+    verify(passwordEncoder, never()).encode(any());
+  }
 
 
   /*
    * TODO CASE: (delete) success + not found
    * */
+  @Test
+  void delete_success() {
+
+    // Arrange
+    Instant justNow = new Date().toInstant();
+    Long id = 1L;
+
+    when(userRepository.existsById(id)).thenReturn(true);
+
+    assertDoesNotThrow(() -> userService.delete(id));
+
+    verify(userRepository, times(1)).existsById(id);
+    verify(userRepository, times(1)).deleteById(id);
+
+  }
+
+  @Test
+  void delete_not_found() {
+    Long userId = 99L;
+
+    when(userRepository.existsById(userId)).thenReturn(false);
+
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.delete(userId));
+
+    assertEquals("User not found with id" + userId, exception.getMessage());
+
+    verify(userRepository, times(1)).existsById(userId);
+    verify(userRepository, never()).deleteById(userId);
+  }
 
 }
