@@ -23,6 +23,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -144,6 +145,10 @@ class CategoryControllerTest {
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
       assertThat(response.getBody().getStatusCode()).isEqualTo(200);
       assertThat(response.getBody().getMessage()).isEqualTo("Categories Retrieved Successfully");
+
+      // interaction verification
+      verify(categoryService, times(1)).findAll();
+      verify(categoryMapper, times(1)).toTypeList(List.of());
     }
 
     @Test
@@ -167,6 +172,10 @@ class CategoryControllerTest {
         .hasSize(1)
         .first()
         .satisfies(cat -> assertThat(cat.products()).isEmpty());
+
+      // interaction verification
+      verify(categoryService, times(1)).findAll();
+      verify(categoryMapper).toTypeList(List.of(emptyCat));
     }
   }
 
