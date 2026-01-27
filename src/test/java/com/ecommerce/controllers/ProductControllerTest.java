@@ -94,6 +94,7 @@ class ProductControllerTest {
       ResponseEntity<ApiResponse<List<Product>>> response = productController.index();
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData()).isEmpty();
     }
   }
@@ -110,6 +111,7 @@ class ProductControllerTest {
       ResponseEntity<ApiResponse<Product>> response = productController.findById(1L);
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getStatusCode()).isEqualTo(200);
       assertThat(response.getBody().getMessage()).isEqualTo("Products Retrieved Successfully");
       assertThat(response.getBody().getData()).isEqualTo(laptop);
@@ -167,6 +169,7 @@ class ProductControllerTest {
       ResponseEntity<ApiResponse<Product>> response = productController.update(1L, patchRequest);
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getStatusCode()).isEqualTo(200);
       assertThat(response.getBody().getMessage()).isEqualTo("Products Update Successfully");
       assertThat(response.getBody().getData().getName()).isEqualTo("Updated Mouse");

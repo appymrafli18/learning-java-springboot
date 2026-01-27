@@ -113,12 +113,12 @@ class CategoryControllerTest {
       assertThat(data).hasSize(2);
 
       // Verify first category + product
-      CategoryType cat1 = data.get(0);
+      CategoryType cat1 = data.getFirst();
       assertThat(cat1.id()).isEqualTo(1L);
       assertThat(cat1.name()).isEqualTo("Electronics");
       assertThat(cat1.products()).hasSize(1);
 
-      ProductType prod1 = cat1.products().get(0);
+      ProductType prod1 = cat1.products().getFirst();
       assertThat(prod1.id()).isEqualTo(101L);
       assertThat(prod1.name()).isEqualTo("MacBook Pro");
       assertThat(prod1.price()).isEqualTo(2500000L);
@@ -136,7 +136,14 @@ class CategoryControllerTest {
 
       ResponseEntity<ApiResponse<List<CategoryType>>> response = categoryController.index();
 
+      // Make null-safety explicit
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData()).isEmpty();
+
+      // Optional: also check status & message for extra confidence
+      assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody().getStatusCode()).isEqualTo(200);
+      assertThat(response.getBody().getMessage()).isEqualTo("Categories Retrieved Successfully");
     }
 
     @Test
@@ -155,6 +162,7 @@ class CategoryControllerTest {
 
       ResponseEntity<ApiResponse<List<CategoryType>>> response = categoryController.index();
 
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData())
         .hasSize(1)
         .first()
@@ -184,6 +192,7 @@ class CategoryControllerTest {
       ResponseEntity<ApiResponse<Category>> response = categoryController.create(input);
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getStatusCode()).isEqualTo(201);
       assertThat(response.getBody().getMessage()).isEqualTo("Success create category");
       assertThat(response.getBody().getData().getId()).isEqualTo(300L);

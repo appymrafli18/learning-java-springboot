@@ -98,6 +98,7 @@ class UserControllerTest {
 
       // then
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData()).isEmpty();
     }
   }
@@ -117,6 +118,7 @@ class UserControllerTest {
 
       // then
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData()).isEqualTo(user1);
       assertThat(response.getBody().getMessage()).isEqualTo("Success Get User By Id");
 
@@ -144,6 +146,7 @@ class UserControllerTest {
       ResponseEntity<ApiResponse<User>> response = userController.findByEmail("john.doe@example.com");
 
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData().getEmail()).isEqualTo("john.doe@example.com");
     }
   }
@@ -200,6 +203,7 @@ class UserControllerTest {
 
       // then
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getData().getName()).isEqualTo("Updated Name");
 
       verify(userService).update(1L, patchRequest);
@@ -221,6 +225,7 @@ class UserControllerTest {
 
       // then
       assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+      assertThat(response.getBody()).isNotNull();
       assertThat(response.getBody().getMessage()).isEqualTo("Success Delete User");
       assertThat(response.getBody().getData()).isNull();
 
